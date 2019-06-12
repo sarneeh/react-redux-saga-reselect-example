@@ -6,7 +6,11 @@ import "./App.css";
 const App = ({ todos, fetchTodos }) => {
   useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [fetchTodos]);
+
+  if (todos.loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <main>
@@ -14,7 +18,7 @@ const App = ({ todos, fetchTodos }) => {
         <input placeholder="New task..." />
         <button type="submit">Add Task</button>
         <ul>
-          {todos.map(todo => (
+          {todos.data.map(todo => (
             <li>{todo.title}</li>
           ))}
         </ul>
