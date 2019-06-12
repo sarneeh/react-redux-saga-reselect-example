@@ -1,13 +1,24 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import "./App.css";
 
-function App() {
-  return (
-    <main>
+const App = ({ todos }) => (
+  <main>
+    <div>
       <input placeholder="New task..." />
-    </main>
-  );
-}
+      <button type="submit">Add Task</button>
+      <ul>
+        {todos.map(todo => (
+          <li>{todo.title}</li>
+        ))}
+      </ul>
+    </div>
+  </main>
+);
 
-export default App;
+const mapStateToProps = state => ({
+  todos: state.todos
+});
+
+export default connect(mapStateToProps)(App);
