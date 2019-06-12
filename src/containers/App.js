@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
-import "./App.css";
+import { getPagedTodos } from "../selectors";
 
-const App = ({ todos, fetchTodos }) => {
+const App = ({ loading, todos, fetchTodos, previousPage, nextPage }) => {
   useEffect(() => {
     fetchTodos();
   }, [fetchTodos]);
 
-  if (todos.loading) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
@@ -18,22 +18,31 @@ const App = ({ todos, fetchTodos }) => {
         <input placeholder="New task..." />
         <button type="submit">Add Task</button>
         <ul>
-          {todos.data.map(todo => (
+          {todos.map(todo => (
             <li>{todo.title}</li>
           ))}
         </ul>
+        <button onClick={previousPage}>Previous Page</button>
+        <button onClick={nextPage}>Next Page</button>
       </div>
     </main>
   );
 };
 
 const mapStateToProps = state => ({
-  todos: state.todos
+  todos: getPagedTodos(state),
+  loading: state.todos.loading
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchTodos: () => {
     dispatch({ type: "TODO_FETCH_REQUESTED" });
+  },
+  previousPage: () => {
+    dispatch({ type: "TODO_PREVIOUS_PAGE" });
+  },
+  nextPage: () => {
+    dispatch({ type: "TODO_NEXT_PAGE" });
   }
 });
 
