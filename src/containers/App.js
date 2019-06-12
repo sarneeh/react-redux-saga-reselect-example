@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
-import { getPagedTodos } from "../selectors";
+import AddTodo from "./AddTodo";
+import PagedTodoList from "./PagedTodoList";
+import TodoListPaginator from "./TodoListPaginator";
 
-const App = ({ loading, todos, fetchTodos, previousPage, nextPage }) => {
+const App = ({ loading, fetchTodos }) => {
   useEffect(() => {
     fetchTodos();
   }, [fetchTodos]);
@@ -13,36 +15,21 @@ const App = ({ loading, todos, fetchTodos, previousPage, nextPage }) => {
   }
 
   return (
-    <main>
-      <div>
-        <input placeholder="New task..." />
-        <button type="submit">Add Task</button>
-        <ul>
-          {todos.map(todo => (
-            <li>{todo.title}</li>
-          ))}
-        </ul>
-        <button onClick={previousPage}>Previous Page</button>
-        <button onClick={nextPage}>Next Page</button>
-      </div>
-    </main>
+    <div>
+      <AddTodo />
+      <PagedTodoList />
+      <TodoListPaginator />
+    </div>
   );
 };
 
 const mapStateToProps = state => ({
-  todos: getPagedTodos(state),
-  loading: state.todos.loading
+  loading: state.loading
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchTodos: () => {
     dispatch({ type: "TODO_FETCH_REQUESTED" });
-  },
-  previousPage: () => {
-    dispatch({ type: "TODO_PREVIOUS_PAGE" });
-  },
-  nextPage: () => {
-    dispatch({ type: "TODO_NEXT_PAGE" });
   }
 });
 

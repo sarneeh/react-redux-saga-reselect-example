@@ -1,11 +1,11 @@
 import { createSelector } from "reselect";
 
-const pageSelector = state => state.todos.page;
+export const getPage = state => state.todos.page;
 const perPageSelector = state => state.todos.perPage;
 const todosSelector = state => state.todos.data;
 
 const pageStartIndexSelector = createSelector(
-  pageSelector,
+  getPage,
   perPageSelector,
   (page, perPage) => page * perPage
 );
@@ -21,4 +21,9 @@ export const getPagedTodos = createSelector(
   pageEndIndexSelector,
   todosSelector,
   (pageStart, pageEnd, todos) => todos.slice(pageStart, pageEnd)
+);
+
+export const getTodosTotal = createSelector(
+  todosSelector,
+  todos => todos.length
 );
